@@ -70,17 +70,38 @@ public class StudentSystem {
         Scanner sc = new Scanner(System.in);
         System.out.println("请输入要删除的id");
         String id = sc.next();
-        int index = getIndex(list,id);
-        if (index>=0){
+        int index = getIndex(list, id);
+        if (index >= 0) {
             list.remove(index);
-            System.out.println("id为:"+id+"的学生删除成功");
-        }else {
+            System.out.println("id为:" + id + "的学生删除成功");
+        } else {
             System.out.println("id不存在，删除失败");
         }
     }
 
     public static void updateStudent(ArrayList<student> list) {
-        System.out.println("修改学生");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("请输入要修改的学生id");
+        String id = sc.next();
+        int index = getIndex(list, id);
+        if (index == -1) {
+            System.out.println("要修改的id" + id + "不存在");
+            return ;
+        }
+        student stu = list.get(index);
+        System.out.println("请输入要修改的学生姓名");
+        String newName = sc.next();
+        stu.setName(newName);
+
+        System.out.println("请输入要修改的学生年龄");
+        int newAge = sc.nextInt();
+        stu.setAge(newAge);
+
+        System.out.println("请输入要修改的学生家庭住址");
+        String newAddress = sc.next();
+        stu.setAddress(newAddress);
+
+        System.out.println("学生信息修改成功");
     }
 
     public static void queryStudent(ArrayList<student> list) {
@@ -99,14 +120,14 @@ public class StudentSystem {
     }
 
     public static boolean contains(ArrayList<student> list, String id) {
-        return getIndex(list,id)>=0;
+        return getIndex(list, id) >= 0;
     }
 
     public static int getIndex(ArrayList<student> list, String id) {
         for (int i = 0; i < list.size(); i++) {
             student stu = list.get(i);
             String sid = stu.getId();
-            if (sid.equals(id)){
+            if (sid.equals(id)) {
                 return i;
             }
         }
