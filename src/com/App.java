@@ -1,6 +1,7 @@
 package com;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class App {
@@ -184,12 +185,90 @@ public class App {
     }
 
     private static void login(ArrayList<User> list) {
-        System.out.println("登录");
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < 3; i++) {
+            System.out.println("请输入用户名");
+            String username = sc.next();
+
+            boolean flag = contains(list, username);
+            if (!flag) {
+                System.out.println("用户名" + username + "未注册，请先注册");
+                return;
+            }
+
+            System.out.println("请输入密码");
+            String password = sc.next();
+
+            while (true) {
+                String rightCode = getCode();
+                System.out.println("当前验证码为" + rightCode);
+                System.out.println("请输入验证码");
+                String code = sc.next();
+                if (code.equalsIgnoreCase(rightCode)) {
+                    System.out.println("验证码正确");
+                    break;
+                } else {
+                    System.out.println("验证码错误");
+                    continue;
+                }
+            }
+
+            User useInfo = new User(username, password, null, null);
+            boolean result = checkUserInfo(list, useInfo);
+            if (result){
+                System.out.println("登录成功，可用开始使用学生管理系统了");
+                break;
+            }else {
+                System.out.println("登陆失败，用户名或密码错误");
+                if (i==2){
+                    System.out.println("当前账号"+"已被锁定");
+                    return;
+                }else {
+                    System.out.println("用户名或密码错误，还剩下"+(2-i)+"次机会");
+                }
+            }
+        }
+    }
+
+    private static boolean checkUserInfo(ArrayList<User> list, User useInfo) {
+        for (int i = 0; i < list.size(); i++) {
+            User user = list.get(i);
+            if (user.getUsername().equals(useInfo.getUsername()) && user.getPassword().equals(useInfo.getPassword())){
+                return true;
+            }
+        }
+        return  false;
     }
 
     private static void forgetPassword(ArrayList<User> list) {
         System.out.println("忘记密码");
     }
 
+    private static String getCode() {
+        ArrayList<Character> list = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            list.add((char) ('a' + i));
+            list.add((char) ('A' + i));
+        }
 
+        StringBuilder sb = new StringBuilder();
+        Random r = new Random();
+        for (int i = 0; i < 4; i++) {
+            int inedx = r.nextInt(list.size());
+            char c = list.get(inedx);
+            sb.append(c);
+        }
+
+        //把一个随机数字添加到末尾
+        int number = r.nextInt(10);
+        sb.append(number);
+
+        //把字符串变为字符数组
+        char[] arr = sb.toString().toCharArray();
+        int randomIndex = r.nextInt(arr.length);
+        char temp = arr[randomIndex];
+        arr[randomIndex] = arr[arr.length - 1];
+        arr[arr.length - 1] = temp;
+        return new String(arr);
+    }
 }
