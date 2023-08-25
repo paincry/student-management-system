@@ -26,10 +26,11 @@ public class App {
 
     private static void register(ArrayList<User> list) {
         Scanner sc = new Scanner(System.in);
+        String username;
         //键盘录入用户名
         while (true) {
             System.out.println("请输入用户名");
-            String username = sc.next();
+            username = sc.next();
             boolean flag1 = checkUsername(username);
             if (!flag1) {
                 System.out.println("用户名格式不正确，请重新输入");
@@ -45,9 +46,10 @@ public class App {
         }
 
         //键盘录入密码
+        String password;
         while (true) {
             System.out.println("请输入要注册的密码");
-            String password = sc.next();
+            password = sc.next();
             System.out.println("请再次输入要注册的密码");
             String againPassword = sc.next();
             if (!password.equals(againPassword)) {
@@ -60,9 +62,10 @@ public class App {
         }
 
         //键盘录入身份证号码
+        String personID;
         while (true) {
             System.out.println("请输入身份证号码");
-            String personID = sc.next();
+            personID = sc.next();
             boolean flag = checkPersonID(personID);
             if (flag) {
                 System.out.println("身份证号码满足要求");
@@ -74,19 +77,34 @@ public class App {
         }
 
         //键盘录入手机号码
+        String phoneNumber;
         while (true) {
             System.out.println("请输入手机号码");
-            String phoneNumber = sc.next();
+            phoneNumber = sc.next();
             boolean flag = checkPhoneNumber(phoneNumber);
-            if (flag){
+            if (flag) {
                 System.out.println("手机号码格式正确");
                 break;
-            }else{
+            } else {
                 System.out.println("手机号码格式有误，请重新输入");
                 continue;
             }
         }
 
+
+        //将键盘录入的信息添加到student对象中
+        User u = new User(username, password, personID, phoneNumber);
+        list.add(u);
+        System.out.println("注册成功");
+
+        printlist(list);
+    }
+
+    private static void printlist(ArrayList<User> list) {
+        for (int i = 0; i < list.size(); i++) {
+            User user = list.get(i);
+            System.out.println(user.getUsername() + "," + user.getPassword() + "," + user.getPersonID() + "," + user.getPhoneNumber());
+        }
     }
 
     private static boolean checkPhoneNumber(String phoneNumber) {
