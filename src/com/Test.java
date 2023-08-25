@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Test {
     public static void main(String[] args) {
-        getCode();
+        System.out.println(getCode());
     }
 
     private static String getCode() {
@@ -27,7 +27,12 @@ public class Test {
         int number = r.nextInt(10);
         sb.append(number);
 
-        System.out.println(sb);
-        return "";
+        //把字符串变为字符数组
+        char[] arr = sb.toString().toCharArray();
+        int randomIndex = r.nextInt(arr.length);
+        char temp = arr[randomIndex];
+        arr[randomIndex]=arr[arr.length-1];
+        arr[arr.length-1]=temp;
+        return new String(arr);
     }
 }
