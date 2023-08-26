@@ -1,5 +1,6 @@
 package com;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -217,6 +218,8 @@ public class App {
             boolean result = checkUserInfo(list, useInfo);
             if (result){
                 System.out.println("登录成功，可用开始使用学生管理系统了");
+                StudentSystem ss = new StudentSystem();
+                ss.startStudentSystem();
                 break;
             }else {
                 System.out.println("登陆失败，用户名或密码错误");
@@ -241,7 +244,54 @@ public class App {
     }
 
     private static void forgetPassword(ArrayList<User> list) {
-        System.out.println("忘记密码");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("请输入用户名");
+        String username= sc.next();
+        boolean flag = contains(list,username);
+        if (!flag){
+            System.out.println("当前用户未注册");
+            return;
+        }
+
+        System.out.println("请输入身份证号码");
+        String personID = sc.next();
+        System.out.println("请输入手机号码");
+        String phoneNumber = sc.next();
+
+        int index = findIndex(list,username);
+        User user = list.get(index);
+        if (!(user.getPersonID().equalsIgnoreCase(personID) && user.getPhoneNumber().equals(phoneNumber))){
+            System.out.println("身份证号码或手机号码有误，请重新输入");
+            return;
+        }
+
+        String password;
+        while (true) {
+            System.out.println("请输入新的密码");
+            password = sc.next();
+            System.out.println("请再次输入新的密码");
+            String againPassword = sc.next();
+            if (password.equals(againPassword)){
+                System.out.println("两次密码输入一致");
+                break;
+            }else {
+                System.out.println("两次密码输入不一致，请重新输入");
+                continue;
+            }
+        }
+
+        user.setPassword(password);
+        System.out.println("密码修改成功");
+    }
+
+    private static int findIndex(ArrayList<User> list, String username) {
+        for (int i = 0; i < list.size(); i++) {
+            User user = list.get(i);
+            if (user.getUsername().equals(username)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static String getCode() {
